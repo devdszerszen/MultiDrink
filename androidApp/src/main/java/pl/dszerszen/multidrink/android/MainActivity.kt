@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.dszerszen.multidrink.Greeting
+import pl.dszerszen.multidrink.data.network.DrinksRepositoryImpl
 
 @Composable
 fun MyApplicationTheme(
@@ -77,7 +78,7 @@ class MainActivity : ComponentActivity() {
                             text = "Still loading..."
                             delay(1000L)
                             text = try {
-                                Greeting().greeting()
+                                DrinksRepositoryImpl().getRandomDrink().toString()
                             } catch (e: Exception) {
                                 e.message ?: "unknown error"
                             }

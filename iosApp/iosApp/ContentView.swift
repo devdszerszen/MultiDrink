@@ -13,10 +13,10 @@ extension ContentView {
     class ViewModel: ObservableObject {
         @Published var text = "Loading..."
         init() {
-            Greeting().greeting{ greeting, error in
+            DrinksRepositoryImpl().getRandomDrink { drink, error in
                 DispatchQueue.main.async {
-                    if let greeting = greeting {
-                        self.text = greeting
+                    if let drink = drink {
+                        self.text = drink.name
                     } else {
                         self.text = error?.localizedDescription ?? "Unknown error"
                     }
