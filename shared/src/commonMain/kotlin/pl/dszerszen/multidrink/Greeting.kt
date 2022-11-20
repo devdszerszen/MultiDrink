@@ -1,9 +1,14 @@
 package pl.dszerszen.multidrink
 
-class Greeting {
-    private val platform: Platform = getPlatform()
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 
-    fun greeting(): String {
-        return "Hello, ${platform.name}!"
+class Greeting {
+    private val client = HttpClient()
+
+    suspend fun greeting(): String {
+        val response = client.get("https://ktor.io/docs/")
+        return response.bodyAsText()
     }
 }
