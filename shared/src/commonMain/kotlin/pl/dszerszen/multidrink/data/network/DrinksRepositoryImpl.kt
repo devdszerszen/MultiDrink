@@ -1,11 +1,14 @@
 package pl.dszerszen.multidrink.data.network
 
+import pl.dszerszen.multidrink.db.DrinksDatabase
 import pl.dszerszen.multidrink.domain.model.Drink
 import pl.dszerszen.multidrink.domain.repository.DrinksRepository
 
-class DrinksRepositoryImpl : DrinksRepository {
+class DrinksRepositoryImpl(
+    private val database: DrinksDatabase,
+    private val api: DrinksApi
+) : DrinksRepository {
 
-    private val api = DrinksApi()
 
     override suspend fun getRandomDrink(): Drink {
         return api.getRandom()

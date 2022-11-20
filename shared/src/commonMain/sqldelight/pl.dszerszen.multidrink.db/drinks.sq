@@ -1,0 +1,7 @@
+CREATE TABLE drinks (
+id      TEXT PRIMARY KEY NOT NULL,
+name    TEXT             NOT NULL
+);
+
+getAll:
+SELECT * FROM drinks;

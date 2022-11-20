@@ -95,8 +95,8 @@ android {
 }
 
 sqldelight {
-    database("LocalDb") {
-        packageName = "multidrink.db"
+    database("DrinksDatabase") {
+        packageName = "pl.dszerszen.multidrink.db"
         sourceFolders = listOf("sqldelight")
     }
 }
