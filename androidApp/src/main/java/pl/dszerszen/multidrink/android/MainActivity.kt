@@ -16,10 +16,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import pl.dszerszen.multidrink.Greeting
-import pl.dszerszen.multidrink.data.network.DrinksRepositoryImpl
+import pl.dszerszen.multidrink.domain.repository.DrinksRepository
+import javax.inject.Inject
 
 @Composable
 fun MyApplicationTheme(
@@ -60,7 +61,12 @@ fun MyApplicationTheme(
     )
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var drinksRepository: DrinksRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -78,7 +84,7 @@ class MainActivity : ComponentActivity() {
                             text = "Still loading..."
                             delay(1000L)
                             text = try {
-                                DrinksRepositoryImpl().getRandomDrink().toString()
+                                drinksRepository.getRandomDrink().toString()
                             } catch (e: Exception) {
                                 e.message ?: "unknown error"
                             }
