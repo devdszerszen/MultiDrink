@@ -12,8 +12,9 @@ struct ContentView: View {
 extension ContentView {
     class ViewModel: ObservableObject {
         @Published var text = "Loading..."
+        private let drinksRepository = RepositoryModule().drinkRepository
         init() {
-            DrinksRepositoryImpl().getRandomDrink { drink, error in
+            drinksRepository.getRandomDrink { drink, error in
                 DispatchQueue.main.async {
                     if let drink = drink {
                         self.text = drink.name
