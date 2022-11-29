@@ -16,11 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import pl.dszerszen.multidrink.domain.repository.DrinksRepository
-import javax.inject.Inject
 
 @Composable
 fun MyApplicationTheme(
@@ -61,11 +60,9 @@ fun MyApplicationTheme(
     )
 }
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var drinksRepository: DrinksRepository
+    private val drinksRepository: DrinksRepository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

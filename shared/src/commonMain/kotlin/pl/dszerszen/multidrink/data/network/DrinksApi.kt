@@ -7,8 +7,8 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import pl.dszerszen.multidrink.domain.model.Drink
-import pl.dszerszen.multidrink.domain.model.DrinkResponse
+import pl.dszerszen.multidrink.data.network.model.DrinkDto
+import pl.dszerszen.multidrink.data.network.model.DrinkResponseDto
 
 class DrinksApi {
     private val httpClient = HttpClient{
@@ -25,8 +25,8 @@ class DrinksApi {
         }
     }
 
-    suspend fun getRandom(): Drink {
-        return httpClient.get(BASE_URL + "random.php").body<DrinkResponse>().drinks.first()
+    suspend fun getRandom(): DrinkDto {
+        return httpClient.get(BASE_URL + "random.php").body<DrinkResponseDto>().drinks.first()
     }
 
     companion object {
