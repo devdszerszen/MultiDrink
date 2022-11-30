@@ -11,7 +11,7 @@ import shared
 
 struct MainScreen: View {
     
-    @StateObject private var viewModel = ViewModel()
+    @ObservedObject private var viewModel = ViewModel()
     
     var body: some View {
         VStack {
@@ -29,6 +29,12 @@ struct MainScreen: View {
             }
             if let message = viewModel.message {
                 Text(message)
+                TextField("Input drink name", text:$viewModel.input)
+                Button(action: {
+                    viewModel.search()
+                }, label: {
+                    Text("Search")
+                })
             }
         }
     }
@@ -38,10 +44,25 @@ extension MainScreen {
     class ViewModel: ObservableObject {
         @Published var drink: Drink? = nil
         @Published var message: String? = "Loading..."
+        var input: String = ""
         
         private let drinksRepository = RepositoryModuleDI().getDrinksRepository()
         
         init() {
+//            drinksRepository.getRandomDrink { drink, error in
+//                DispatchQueue.main.async {
+//                    if let drink = drink {
+//                        self.drink = drink
+//                        self.message = nil
+//                    } else {
+//                        self.message = error?.localizedDescription ?? "Unknown error"
+//                    }
+//                }
+//            }
+        }
+        
+        func search() {
+            print(self.input)
             drinksRepository.getRandomDrink { drink, error in
                 DispatchQueue.main.async {
                     if let drink = drink {
