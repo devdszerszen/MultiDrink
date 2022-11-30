@@ -62,7 +62,7 @@ extension MainScreen {
         }
         
         func search() {
-            print(self.input)
+            print(input)
             drinksRepository.getRandomDrink { drink, error in
                 DispatchQueue.main.async {
                     if let drink = drink {
@@ -74,5 +74,11 @@ extension MainScreen {
                 }
             }
         }
+    }
+}
+
+struct MainScreen_Preview: PreviewProvider {
+    static var previews: some View {
+        MainScreen()
     }
 }
