@@ -7,19 +7,17 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import pl.dszerszen.multidrink.domain.repository.DrinksRepository
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.dszerszen.multidrink.android.ui.search.SearchScreen
+import pl.dszerszen.multidrink.android.ui.search.SearchViewModel
 
 @Composable
 fun MyApplicationTheme(
@@ -62,7 +60,7 @@ fun MyApplicationTheme(
 
 class MainActivity : ComponentActivity() {
 
-    private val drinksRepository: DrinksRepository by inject()
+    private val searchViewModel: SearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,37 +70,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val scope = rememberCoroutineScope()
-                    var text by remember { mutableStateOf("Loading...") }
-
-                    LaunchedEffect(Unit) {
-                        scope.launch {
-                            delay(1000L)
-                            text = "Still loading..."
-                            delay(1000L)
-                            text = try {
-                                drinksRepository.getRandomDrink().toString()
-                            } catch (e: Exception) {
-                                e.message ?: "unknown error"
-                            }
-                        }
-                    }
-                    Greeting(text)
+                    SearchScreen(
+                        viewModel = searchViewModel,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(text: String) {
-    Text(text = text)
-}
-
-@Preview
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        Greeting("Hello, Android!")
     }
 }
