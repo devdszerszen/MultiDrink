@@ -11,7 +11,7 @@ import pl.dszerszen.multidrink.data.network.model.DrinkDto
 import pl.dszerszen.multidrink.data.network.model.DrinkResponseDto
 
 class DrinksApi {
-    private val httpClient = HttpClient{
+    private val httpClient = HttpClient {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -27,6 +27,10 @@ class DrinksApi {
 
     suspend fun getRandom(): DrinkDto {
         return httpClient.get(BASE_URL + "random.php").body<DrinkResponseDto>().drinks.first()
+    }
+
+    suspend fun getByName(name: String): List<DrinkDto> {
+        return httpClient.get(BASE_URL + "search.php?s=$name").body<DrinkResponseDto>().drinks
     }
 
     companion object {
