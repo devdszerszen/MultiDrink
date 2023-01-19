@@ -7,13 +7,15 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,13 +54,7 @@ private fun SearchScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             item {
-                Column(modifier = Modifier.run {
-                    if (state.drinks.isEmpty()) {
-                        fillParentMaxHeight()
-                    } else {
-                        wrapContentHeight()
-                    }
-                }) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = state.searchInput,
@@ -82,6 +78,21 @@ private fun SearchScreen(
                             text = state.errorMessage.orEmpty(),
                             color = Color.Red
                         )
+                    }
+                }
+            }
+            if (state.isInitialState) {
+                item {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)) {
+                        Icon(Icons.Default.Face, null,
+                            Modifier
+                                .size(128.dp)
+                                .align(CenterHorizontally))
+                        Spacer(Modifier.height(8.dp))
+                        Text("Delicious drinks are waiting for you, check it out!")
                     }
                 }
             }

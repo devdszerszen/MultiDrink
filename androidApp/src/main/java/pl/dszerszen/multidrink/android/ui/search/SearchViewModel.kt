@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import pl.dszerszen.multidrink.domain.fold
 import pl.dszerszen.multidrink.domain.model.Drink
 import pl.dszerszen.multidrink.domain.repository.DrinksRepository
 
@@ -22,49 +21,58 @@ class SearchViewModel constructor(
 
     fun onUiIntent(uiIntent: SearchUiIntent) {
         when (uiIntent) {
-            is SearchUiIntent.OnInputChanged -> search(uiIntent.text)
+            is SearchUiIntent.OnInputChanged -> onSearchInputChanged(uiIntent.text)
+        }
+    }
+
+    private fun onSearchInputChanged(searchInput: String) {
+        searchJob?.cancel()
+        if (searchInput.isEmpty()) {
+            _viewState.update { it.copy(
+                drinks = emptyList(),
+                isInitialState = true,
+                searchInput = searchInput,
+                errorMessage = null
+            ) }
+        } else {
+            search(searchInput)
         }
     }
 
     private fun search(text: String) {
-        _viewState.update { it.copy(searchInput = text) }
-        searchJob?.cancel()
+        _viewState.update { it.copy(searchInput = text, errorMessage = null) }
         searchJob = viewModelScope.launch {
-            delay(1000L)
-            _viewState.update { it.copy(isLoading = true) }
-            drinksRepository.findByName(text).let { response ->
-                response.fold(
-                    onSuccess = { drinks ->
-                        _viewState.update {
-                            it.copy(
-                                drinks = drinks,
-                                isLoading = false,
-                                errorMessage = null
-                            )
-                        }
-                    },
-                    onFail = { error ->
-                        _viewState.update {
-                            it.copy(
-                                drinks = emptyList(),
-                                isLoading = false,
-                                errorMessage = error.message
-                            )
-                        }
+            delay(500L)
+            _viewState.update { it.copy(isLoading = true, isInitialState = false) }
+            drinksRepository.findByName(text).fold(
+                onSuccess = { drinks ->
+                    _viewState.update {
+                        it.copy(
+                            drinks = drinks,
+                            isLoading = false,
+                            errorMessage = null
+                        )
                     }
-                )
-
-
-            }
+                },
+                onFailure = { error ->
+                    _viewState.update {
+                        it.copy(
+                            drinks = emptyList(),
+                            isLoading = false,
+                            errorMessage = error.message
+                        )
+                    }
+                }
+            )
         }
     }
-
 }
 
 data class SearchViewState(
     val searchInput: String = "",
     val drinks: List<Drink> = emptyList(),
     val isLoading: Boolean = false,
+    val isInitialState: Boolean = true,
     val errorMessage: String? = null
 )
 
