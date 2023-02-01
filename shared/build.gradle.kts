@@ -58,7 +58,7 @@ kotlin {
                 //sql
                 implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
                 //koin
-                implementation("io.insert-koin:koin-android:3.2.0")
+                implementation("io.insert-koin:koin-android:3.3.0")
             }
         }
         val androidTest by getting
