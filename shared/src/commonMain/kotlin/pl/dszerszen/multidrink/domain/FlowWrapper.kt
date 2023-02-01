@@ -2,12 +2,11 @@ package pl.dszerszen.multidrink.domain
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onCompletion
 
 fun <T : Any> Flow<T>.wrapped() = FlowWrapper(this)
 
 class FlowWrapper<T : Any>(private val wrapped: Flow<T>) {
-    fun handleIos(onNext: (T) -> Unit, onComplete: (cause: Throwable?) -> Unit): Cancellable {
+    fun handleIos(onNext: (T) -> Unit, onComplete: (cause: AppException?) -> Unit): Cancellable {
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
         scope.launch {
@@ -17,9 +16,9 @@ class FlowWrapper<T : Any>(private val wrapped: Flow<T>) {
                 }
                 onComplete(null)
             } catch (cancellationException: CancellationException) {
-                //do nothing
+                onComplete(null)
             } catch (th: Throwable) {
-                onComplete(th)
+                onComplete(th.mapToError())
             }
         }
         return object : Cancellable {

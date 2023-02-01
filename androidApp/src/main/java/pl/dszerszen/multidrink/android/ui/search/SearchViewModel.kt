@@ -28,12 +28,14 @@ class SearchViewModel constructor(
     private fun onSearchInputChanged(searchInput: String) {
         searchJob?.cancel()
         if (searchInput.isEmpty()) {
-            _viewState.update { it.copy(
-                drinks = emptyList(),
-                isInitialState = true,
-                searchInput = searchInput,
-                errorMessage = null
-            ) }
+            _viewState.update {
+                it.copy(
+                    drinks = emptyList(),
+                    isInitialState = true,
+                    searchInput = searchInput,
+                    errorMessage = null
+                )
+            }
         } else {
             search(searchInput)
         }
@@ -44,26 +46,24 @@ class SearchViewModel constructor(
         searchJob = viewModelScope.launch {
             delay(500L)
             _viewState.update { it.copy(isLoading = true, isInitialState = false) }
-            drinksRepository.findByName(text).fold(
-                onSuccess = { drinks ->
-                    _viewState.update {
-                        it.copy(
-                            drinks = drinks,
-                            isLoading = false,
-                            errorMessage = null
-                        )
-                    }
-                },
-                onFailure = { error ->
-                    _viewState.update {
-                        it.copy(
-                            drinks = emptyList(),
-                            isLoading = false,
-                            errorMessage = error.message
-                        )
-                    }
+            val drinks = drinksRepository.findByName(text).handleAndroid { exception ->
+                _viewState.update {
+                    it.copy(
+                        drinks = emptyList(),
+                        isLoading = false,
+                        errorMessage = exception.message
+                    )
                 }
-            )
+            }
+            drinks?.let {
+                _viewState.update {
+                    it.copy(
+                        drinks = drinks,
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
+            }
         }
     }
 }

@@ -49,9 +49,8 @@ extension SearchScreen {
             }
         }
         
-        private let drinksRepository = RepositoryModuleDI().getDrinksRepository()
-        
-        init() {}
+        private let drinksRepository = RepositoryModuleDI().drinksRepository
+        private var searchTask: Cancellable? = nil
         
         func onInputChanged() {
             errorMessage = nil
@@ -65,22 +64,13 @@ extension SearchScreen {
         }
         
         private func search() {
-            drinksRepository.findByName(name:input) { response, error in
-                DispatchQueue.main.async {
-                    if let response = response {
-                        response.fold(
-                            onSuccess: { data in
-                                self.drinks = data as? [Drink] ?? []
-                                self.errorMessage = nil
-                                return
-                            }, onFailure: { error in
-                                self.drinks = []
-                                self.errorMessage = error.message
-                                return
-                            }
-                        )
-                    }
-                }
+            searchTask?.cancel()
+            searchTask = drinksRepository.findByName(name: input).handleIos { drinksList in
+                self.drinks = drinksList as? [Drink] ?? []
+                self.errorMessage = nil
+            } onError: { error in
+                self.drinks = []
+                self.errorMessage = error.message
             }
         }
     }

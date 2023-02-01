@@ -9,19 +9,17 @@ interface Cancellable {
 class SuspendWrapper<T : Any>(private val wrapped: suspend () -> T) {
     fun handleIos(
         onSuccess: (T) -> Unit,
-        onError: (Throwable) -> Unit
-    ) : Cancellable {
+        onError: (AppException) -> Unit
+    ): Cancellable {
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
         scope.launch {
             try {
                 onSuccess(wrapped())
-            }
-            catch (cancellationException: CancellationException) {
+            } catch (ignored: CancellationException) {
                 //do nothing
-            }
-            catch (th: Throwable) {
-                onError(th)
+            } catch (th: Throwable) {
+                onError(th.mapToError())
             }
         }
         return object : Cancellable {
@@ -31,7 +29,15 @@ class SuspendWrapper<T : Any>(private val wrapped: suspend () -> T) {
         }
     }
 
-    suspend fun handleAndroid() = wrapped()
+    suspend fun handleAndroid(onError: (AppException) -> Unit) : T? = try {
+        wrapped()
+    } catch (ignored: CancellationException) {
+        //do nothing
+        null
+    } catch (th: Throwable) {
+        onError(th.mapToError())
+        null
+    }
 }
 
-fun <T : Any> handleSuspend(action: suspend () -> T) : SuspendWrapper<T> = SuspendWrapper(action)
+fun <T : Any> handleSuspend(action: suspend () -> T): SuspendWrapper<T> = SuspendWrapper(action)

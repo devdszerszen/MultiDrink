@@ -11,6 +11,5 @@ val repositoryModule = module {
 }
 
 class RepositoryModuleDI : KoinComponent {
-    private val repository: DrinksRepository by inject()
-    fun getDrinksRepository(): DrinksRepository = repository
+    val drinksRepository: DrinksRepository by inject()
 }
