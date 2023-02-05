@@ -32,6 +32,10 @@ android {
     }
 }
 
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation(project(":shared"))
     implementation("androidx.compose.ui:ui:1.3.3")
@@ -56,4 +60,13 @@ dependencies {
     implementation ("io.insert-koin:koin-androidx-compose:3.3.0")
 
     implementation("io.coil-kt:coil-compose:2.2.2")
+
+    //Test
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation ("io.mockk:mockk:1.13.4")
+    testImplementation ("io.mockk:mockk-agent:1.13.4")
+    testImplementation ("io.mockk:mockk-android:1.13.4")
+    testImplementation ("io.kotest:kotest-assertions-core:5.5.4")
 }
