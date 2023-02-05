@@ -30,7 +30,11 @@ struct SearchScreen: View {
                 
             } else {
                 List(viewModel.drinks, id: \.id) { drink in
-                    DrinkListItem(drink: drink)
+                    NavigationLink {
+                        DetailsScreen(drink: drink)
+                    } label: {
+                        DrinkListItem(drink: drink)
+                    }
                 }
             }
             Spacer()

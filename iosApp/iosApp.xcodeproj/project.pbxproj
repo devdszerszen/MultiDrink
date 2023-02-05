@@ -13,6 +13,7 @@
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		7915BA2A293B6B700043FB71 /* DrinkListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7915BA29293B6B700043FB71 /* DrinkListItem.swift */; };
 		7915BA2C293B6D150043FB71 /* SearchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7915BA2B293B6D150043FB71 /* SearchScreen.swift */; };
+		79D34991298FDB0C00DAD2BB /* DetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D34990298FDB0C00DAD2BB /* DetailsScreen.swift */; };
 		79EEDF282936882400DB7748 /* ImageExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EEDF272936882400DB7748 /* ImageExt.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7915BA29293B6B700043FB71 /* DrinkListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkListItem.swift; sourceTree = "<group>"; };
 		7915BA2B293B6D150043FB71 /* SearchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchScreen.swift; sourceTree = "<group>"; };
+		79D34990298FDB0C00DAD2BB /* DetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsScreen.swift; sourceTree = "<group>"; };
 		79EEDF272936882400DB7748 /* ImageExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExt.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,9 +116,18 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		79D3498F298FDAF900DAD2BB /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				79D34990298FDB0C00DAD2BB /* DetailsScreen.swift */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
 		79EEDF212936869500DB7748 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				79D3498F298FDAF900DAD2BB /* Details */,
 				7915BA28293B6B520043FB71 /* Common */,
 				7915BA27293B6B450043FB71 /* Search */,
 			);
@@ -227,6 +238,7 @@
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7915BA2A293B6B700043FB71 /* DrinkListItem.swift in Sources */,
 				7915BA2C293B6D150043FB71 /* SearchScreen.swift in Sources */,
+				79D34991298FDB0C00DAD2BB /* DetailsScreen.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,6 +371,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				INFOPLIST_FILE = iosApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -384,6 +397,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)";
 				INFOPLIST_FILE = iosApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
