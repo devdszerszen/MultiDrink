@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import pl.dszerszen.multidrink.android.ui.base.InAppEventDispatcher
 import pl.dszerszen.multidrink.android.ui.base.NavScreen
 import pl.dszerszen.multidrink.android.ui.base.getScreenArg
+import pl.dszerszen.multidrink.android.ui.base.handleException
 import pl.dszerszen.multidrink.domain.model.Drink
 import pl.dszerszen.multidrink.domain.repository.DrinksRepository
 
@@ -23,16 +24,16 @@ class DetailsViewModel constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        savedStateHandle.getScreenArg(NavScreen.Details, onSuccess = ::fetchDrinkDetails, onError = {
-            //TODO error handling
-        })
+        savedStateHandle.getScreenArg(
+            screen = NavScreen.Details,
+            onSuccess = ::fetchDrinkDetails,
+            onError = ::handleException
+        )
     }
 
     private fun fetchDrinkDetails(drinkId: String) {
         viewModelScope.launch {
-            val drink = drinksRepository.findById(drinkId).handleAndroid {
-                //TODO error handling
-            }
+            val drink = drinksRepository.findById(drinkId).handleAndroid(::handleException)
             _viewState.update { it.copy(drink = drink) }
         }
     }

@@ -1,9 +1,6 @@
 package pl.dszerszen.multidrink.android.ui.search
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -60,7 +57,6 @@ private fun SearchScreen(
                         )
                     }
                 },
-                isError = state.errorMessage.isNullOrEmpty().not()
             )
             LazyColumn(
                 modifier = Modifier
@@ -70,20 +66,6 @@ private fun SearchScreen(
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                item {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        AnimatedVisibility(
-                            visible = state.errorMessage.isNullOrEmpty().not(),
-                            enter = expandVertically(),
-                            exit = shrinkVertically()
-                        ) {
-                            Text(
-                                text = state.errorMessage.orEmpty(),
-                                color = Color.Red
-                            )
-                        }
-                    }
-                }
                 if (state.isInitialState) {
                     item {
                         Column(

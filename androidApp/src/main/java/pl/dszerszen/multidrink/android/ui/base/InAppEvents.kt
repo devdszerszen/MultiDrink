@@ -1,6 +1,8 @@
 package pl.dszerszen.multidrink.android.ui.base
 
 import kotlinx.coroutines.channels.Channel
+import pl.dszerszen.multidrink.android.ui.error.BottomInfoMessageType
+import pl.dszerszen.multidrink.android.ui.error.BottomInfoMessageType.ERROR
 import pl.dszerszen.multidrink.domain.AppException
 
 interface InAppEventDispatcher {
@@ -28,12 +30,23 @@ object InAppComponent : InAppEventDispatcher, InAppEventHandler {
 sealed class InAppEvent {
     class Navigate(val target: NavScreen, val argument: String?) : InAppEvent()
     object NavigateBack : InAppEvent()
-    class Error(val error: AppException) : InAppEvent()
-//    class Message(val message: InAppMessage) : InAppEvent()
+    class BottomInfo(
+        val title: String,
+        val desc: String?,
+        val type: BottomInfoMessageType
+    ) : InAppEvent()
 }
 
 fun InAppEventDispatcher.navigate(target: NavScreen, argument: String?) =
     dispatchEvent(InAppEvent.Navigate(target, argument))
 
 fun InAppEventDispatcher.navigateBack() = dispatchEvent(InAppEvent.NavigateBack)
-fun InAppEventDispatcher.handleError(error: AppException) = dispatchEvent(InAppEvent.Error(error))
+
+fun InAppEventDispatcher.showInfo(
+    title: String,
+    desc: String?,
+    type: BottomInfoMessageType
+) = dispatchEvent(InAppEvent.BottomInfo(title, desc, type))
+
+fun InAppEventDispatcher.handleException(exception: AppException) =
+    dispatchEvent(InAppEvent.BottomInfo(exception.message, exception.cause?.message, ERROR))

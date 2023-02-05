@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pl.dszerszen.multidrink.android.ui.base.InAppEventDispatcher
 import pl.dszerszen.multidrink.android.ui.base.NavScreen
+import pl.dszerszen.multidrink.android.ui.base.handleException
 import pl.dszerszen.multidrink.android.ui.base.navigate
 import pl.dszerszen.multidrink.android.ui.search.SearchUiIntent.OnInputChanged
 import pl.dszerszen.multidrink.android.ui.search.SearchUiIntent.OnItemClicked
@@ -40,7 +41,6 @@ class SearchViewModel constructor(
                     drinks = emptyList(),
                     isInitialState = true,
                     searchInput = searchInput,
-                    errorMessage = null
                 )
             }
         } else {
@@ -53,7 +53,7 @@ class SearchViewModel constructor(
     }
 
     private fun search(text: String) {
-        _viewState.update { it.copy(searchInput = text, errorMessage = null) }
+        _viewState.update { it.copy(searchInput = text) }
         searchJob = viewModelScope.launch {
             delay(500L)
             _viewState.update { it.copy(isLoading = true, isInitialState = false) }
@@ -62,16 +62,15 @@ class SearchViewModel constructor(
                     it.copy(
                         drinks = emptyList(),
                         isLoading = false,
-                        errorMessage = exception.message
                     )
                 }
+                handleException(exception)
             }
             drinks?.let {
                 _viewState.update {
                     it.copy(
                         drinks = drinks,
                         isLoading = false,
-                        errorMessage = null
                     )
                 }
             }
@@ -84,7 +83,6 @@ data class SearchViewState(
     val drinks: List<Drink> = emptyList(),
     val isLoading: Boolean = false,
     val isInitialState: Boolean = true,
-    val errorMessage: String? = null
 )
 
 sealed class SearchUiIntent {
