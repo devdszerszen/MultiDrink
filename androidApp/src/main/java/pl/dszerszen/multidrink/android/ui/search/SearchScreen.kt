@@ -19,20 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.koinViewModel
 import pl.dszerszen.multidrink.android.MyApplicationTheme
 import pl.dszerszen.multidrink.android.ui.common.DrinkListItem
 import pl.dszerszen.multidrink.domain.model.Drink
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel,
-    modifier: Modifier = Modifier
+    viewModel: SearchViewModel = koinViewModel()
 ) {
     val state by viewModel.viewState.collectAsState()
     SearchScreen(
         state = state,
         onIntent = viewModel::onUiIntent,
-        modifier = modifier
+        modifier = Modifier.fillMaxSize()
     )
 }
 
@@ -104,7 +104,9 @@ private fun SearchScreen(
                 }
                 if (state.drinks.isNotEmpty()) {
                     items(state.drinks, { drink -> drink.id }) {
-                        DrinkListItem(it)
+                        DrinkListItem(it) { id ->
+                            onIntent(SearchUiIntent.OnItemClicked(id))
+                        }
                     }
                 }
             }

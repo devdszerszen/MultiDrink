@@ -8,12 +8,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pl.dszerszen.multidrink.android.ui.base.InAppEventDispatcher
+import pl.dszerszen.multidrink.android.ui.base.NavScreen
+import pl.dszerszen.multidrink.android.ui.base.navigate
+import pl.dszerszen.multidrink.android.ui.search.SearchUiIntent.OnInputChanged
+import pl.dszerszen.multidrink.android.ui.search.SearchUiIntent.OnItemClicked
 import pl.dszerszen.multidrink.domain.model.Drink
 import pl.dszerszen.multidrink.domain.repository.DrinksRepository
 
 class SearchViewModel constructor(
-    private val drinksRepository: DrinksRepository
-) : ViewModel() {
+    private val drinksRepository: DrinksRepository,
+    private val eventDispatcher: InAppEventDispatcher,
+) : ViewModel(), InAppEventDispatcher by eventDispatcher {
     private val _viewState = MutableStateFlow(SearchViewState())
     val viewState = _viewState.asStateFlow()
 
@@ -21,7 +27,8 @@ class SearchViewModel constructor(
 
     fun onUiIntent(uiIntent: SearchUiIntent) {
         when (uiIntent) {
-            is SearchUiIntent.OnInputChanged -> onSearchInputChanged(uiIntent.text)
+            is OnInputChanged -> onSearchInputChanged(uiIntent.text)
+            is OnItemClicked -> onItemClicked(uiIntent.drinkId)
         }
     }
 
@@ -39,6 +46,10 @@ class SearchViewModel constructor(
         } else {
             search(searchInput)
         }
+    }
+
+    private fun onItemClicked(drinkId: String) {
+        navigate(NavScreen.Details, drinkId)
     }
 
     private fun search(text: String) {
@@ -78,4 +89,5 @@ data class SearchViewState(
 
 sealed class SearchUiIntent {
     data class OnInputChanged(val text: String) : SearchUiIntent()
+    data class OnItemClicked(val drinkId: String) : SearchUiIntent()
 }

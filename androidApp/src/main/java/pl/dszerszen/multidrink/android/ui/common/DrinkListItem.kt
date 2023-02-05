@@ -1,6 +1,7 @@
 package pl.dszerszen.multidrink.android.ui.common
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,10 +17,11 @@ import pl.dszerszen.multidrink.domain.model.Drink
 @Composable
 fun DrinkListItem(
     drink: Drink,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit
 ) {
     Card(
-        modifier = modifier
+        modifier = modifier.clickable { onClick(drink.id) }
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -36,6 +38,6 @@ fun DrinkListItem(
 fun DrinkListItemPreview() {
     MyApplicationTheme() {
         val drink = Drink("id", "name", "img")
-        DrinkListItem(drink)
+        DrinkListItem(drink){}
     }
 }

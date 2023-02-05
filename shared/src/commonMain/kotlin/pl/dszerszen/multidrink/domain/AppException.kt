@@ -5,6 +5,7 @@ sealed class AppException(
     override val cause: Throwable? = null
 ) : Exception(message, cause) {
     data class NetworkException(override val message: String) : AppException(message)
+    data class BusinessException(override val message: String) : AppException(message)
     data class UnknownException(override val cause: Throwable) : AppException("Unknown error", cause)
 }
 

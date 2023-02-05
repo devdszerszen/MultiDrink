@@ -35,13 +35,19 @@ class DrinksApi {
         }
     }
 
-    suspend fun getRandom(): DrinkDto? {
-        return httpClient.get(BASE_URL + "random.php").body<DrinkResponseDto>().drinks?.first()
+    suspend fun getRandom(): DrinkDto {
+        return httpClient.get(BASE_URL + "random.php").body<DrinkResponseDto>().drinks?.first() ?: throwError()
     }
 
     suspend fun getByName(name: String): List<DrinkDto>? {
         return httpClient.get(BASE_URL + "search.php?s=$name").body<DrinkResponseDto>().drinks
     }
+
+    suspend fun getById(id: String): DrinkDto {
+        return httpClient.get(BASE_URL + "lookup.php?i=$id").body<DrinkResponseDto>().drinks?.first() ?: throwError()
+    }
+
+    private fun throwError(): Nothing = throw AppException.NetworkException("Unable to fetch data")
 
     companion object {
         private const val API_KEY = 1
