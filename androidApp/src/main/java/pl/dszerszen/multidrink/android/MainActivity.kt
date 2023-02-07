@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
             var bottomInfoState by remember { mutableStateOf(BottomInfoState()) }
 
-            MyApplicationTheme {
+            AppTheme {
                 LaunchedEffect(Unit) {
                     inAppEventHandler.handleEvent { event ->
                         when (event) {

@@ -1,7 +1,6 @@
 package pl.dszerszen.multidrink.android.ui.search
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,12 +12,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
-import pl.dszerszen.multidrink.android.MyApplicationTheme
+import pl.dszerszen.multidrink.android.AppTheme
 import pl.dszerszen.multidrink.android.ui.common.DrinkListItem
+import pl.dszerszen.multidrink.android.ui.theme.dimens
 import pl.dszerszen.multidrink.domain.model.Drink
 
 @Composable
@@ -46,7 +45,7 @@ private fun SearchScreen(
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(dimens.large),
                 value = state.searchInput,
                 onValueChange = { onIntent(SearchUiIntent.OnInputChanged(it)) },
                 label = { Text("Input drink name") },
@@ -60,7 +59,6 @@ private fun SearchScreen(
             )
             LazyColumn(
                 modifier = Modifier
-                    .background(Color(233, 233, 233, 255))
                     .padding(paddingValues)
                     .fillMaxSize(),
                 contentPadding = PaddingValues(8.dp),
@@ -100,7 +98,7 @@ private fun SearchScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
 @Composable
 fun SearchScreenPreview_Empty() {
-    MyApplicationTheme() {
+    AppTheme() {
         val state = SearchViewState()
         SearchScreen(state = state, onIntent = {}, modifier = Modifier)
     }
@@ -110,7 +108,7 @@ fun SearchScreenPreview_Empty() {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
 @Composable
 fun SearchScreenPreview_List() {
-    MyApplicationTheme() {
+    AppTheme() {
         val drinks = List(6) { Drink("id$it", "name$it", "") }
         val state = SearchViewState(drinks = drinks)
         SearchScreen(state = state, onIntent = {}, modifier = Modifier)

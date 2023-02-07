@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import org.koin.androidx.compose.koinViewModel
-import pl.dszerszen.multidrink.android.MyApplicationTheme
+import pl.dszerszen.multidrink.android.AppTheme
 import pl.dszerszen.multidrink.domain.model.Drink
 
 @Composable
@@ -60,7 +60,7 @@ private fun DrinkDetails(drink: Drink) {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Dark theme")
 @Composable
 fun DetailsScreenPreview() {
-    MyApplicationTheme {
+    AppTheme {
         val drink = Drink("id", "name", null)
         DetailsScreen(drink)
     }

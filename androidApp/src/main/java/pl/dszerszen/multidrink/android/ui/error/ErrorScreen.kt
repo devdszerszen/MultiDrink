@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import pl.dszerszen.multidrink.android.MyApplicationTheme
+import pl.dszerszen.multidrink.android.AppTheme
 import pl.dszerszen.multidrink.android.ui.error.BottomInfoMessageType.*
 
 class BottomInfoState(
@@ -108,7 +108,7 @@ fun ErrorScreenPreview() {
         }
     }
 
-    MyApplicationTheme() {
+    AppTheme() {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(8.dp),
